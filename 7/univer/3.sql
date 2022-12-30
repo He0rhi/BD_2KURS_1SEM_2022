@@ -1,0 +1,43 @@
+use UNIVER;
+
+
+
+
+
+
+
+SELECT
+d.SUBJECT,
+g.PROFESSION,
+f.FACULTY,
+NOTE,
+
+
+	   sum(NOTE) SUM,
+	   round(avg(cast (NOTE as float(4))),2)[Средняя оценка на экзамене]
+FROM FACULTY  f
+	INNER JOIN GROUPS g ON f.FACULTY = g.FACULTY 
+	INNER JOIN STUDENT s ON g.IDGROUP = s.IDGROUP
+	INNER JOIN PROGRESS d ON s.IDSTUDENT = d.IDSTUDENT
+	WHERE f.FACULTY = 'ИДиП'
+GROUP BY rollup (d.SUBJECT ,g.PROFESSION, f.FACULTY,NOTE )
+
+except
+
+SELECT
+d.SUBJECT,
+g.PROFESSION,
+f.FACULTY,
+NOTE,
+
+
+	   sum(NOTE) SUM,
+	   round(avg(cast (NOTE as float(4))),2)[Средняя оценка на экзамене]
+FROM FACULTY  f
+	INNER JOIN GROUPS g ON f.FACULTY = g.FACULTY 
+	INNER JOIN STUDENT s ON g.IDGROUP = s.IDGROUP
+	INNER JOIN PROGRESS d ON s.IDSTUDENT = d.IDSTUDENT
+	WHERE f.FACULTY = 'ХТиТ'
+GROUP BY cube (d.SUBJECT ,g.PROFESSION, f.FACULTY,NOTE )
+
+
